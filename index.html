@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Курс оператора УЭЦН</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#D8001F; --brand-dark:#9E0018; --brand-soft:#FDE8EB;
+  --graphite:#23262B; --graphite-2:#3A3E45;
+  --bg:#F2F3F5; --surface:#FFFFFF; --surface-2:#F0F1F4; --ink:#1C1F24; --muted:#636A75; --line:#DDE0E5;
+  --accent:#D8001F; --accent-soft:#FDE8EB;
+  --info:#1D63A8; --info-soft:#E6F0FA; --ok:#1E8453; --ok-soft:#E3F4EA;
+  --warn:#C26B00; --warn-soft:#FFF2DE; --bad:#C0141F; --bad-soft:#FCE6E7;
+  --m1:#D8001F; --m2:#1D63A8; --m3:#0E8A8A; --m4:#1E8453; --m5:#C26B00; --m6:#8E1B3C; --m7:#5B4BB0;
+  --c-su:#3A3E45; --c-tmpn:#4F6B5A; --c-kvz:#C26B00; --c-pump:#D8001F; --c-gs:#1D63A8; --c-gz:#0E8A8A; --c-ped:#E06A00; --c-tms:#5B4BB0; --c-valve:#6B717B;
+  --oil:#6B4A1F; --earth-1:#E8DCC6; --earth-2:#DCCBAE; --earth-3:#CDB894; --res:#B98B4E;
+  --shadow:0 1px 2px rgba(20,22,26,.06),0 6px 18px rgba(20,22,26,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --surface:#1B1E23; --surface-2:#24282E; --ink:#ECEEF1; --muted:#9BA2AD; --line:#30353C;
+    --brand-soft:#3A1419; --accent:#FF3B4E; --accent-soft:#3A1419;
+    --info:#6AA8E6; --info-soft:#17283A; --ok:#5CC08C; --ok-soft:#163026; --warn:#F0A94A; --warn-soft:#352812; --bad:#FF6B72; --bad-soft:#3A1719;
+    --earth-1:#3A332A; --earth-2:#433A2E; --earth-3:#4D4233; --oil:#A87A3A; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1B1E23; --surface-2:#24282E; --ink:#ECEEF1; --muted:#9BA2AD; --line:#30353C;
+  --brand-soft:#3A1419; --accent:#FF3B4E; --accent-soft:#3A1419;
+  --info:#6AA8E6; --info-soft:#17283A; --ok:#5CC08C; --ok-soft:#163026; --warn:#F0A94A; --warn-soft:#352812; --bad:#FF6B72; --bad-soft:#3A1719;
+  --earth-1:#3A332A; --earth-2:#433A2E; --earth-3:#4D4233; --oil:#A87A3A; --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.5rem}
+h3{font-size:1.05rem}
+p{margin:0 0 .8em}
+button{font:inherit;cursor:pointer}
+
+/* Header */
+.top{position:sticky;top:0;z-index:20;background:var(--graphite);color:#fff;border-bottom:4px solid var(--brand)}
+.top-inner{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{height:34px;width:auto;display:block}
+.brand-name{font-weight:700;font-size:18px;letter-spacing:.12em;color:#fff}
+.brand-div{width:1px;height:30px;background:rgba(255,255,255,.25)}
+.brand-course{font-size:14px;font-weight:600;line-height:1.2}
+.brand-course small{display:block;font-weight:400;color:#B9BEC6;font-size:12px}
+.top-stats{margin-left:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.stat{font-size:13px;color:#B9BEC6}
+.stat b{color:#fff;font-variant-numeric:tabular-nums}
+.timer-box{background:var(--brand);color:#fff;border-radius:6px;padding:4px 10px;font-weight:700;font-variant-numeric:tabular-nums}
+.progress{width:170px;height:8px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF4D5E,var(--brand));transition:width .3s}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 10px;font-size:13px}
+.btn-ghost:hover{border-color:#fff}
+
+/* Layout */
+.wrap{max-width:1200px;margin:0 auto;padding:22px 16px 48px;display:grid;grid-template-columns:270px 1fr;gap:24px}
+nav.side{position:sticky;top:80px;align-self:start}
+.side-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:var(--shadow)}
+.side-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 8px 10px}
+.side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.side button{width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:9px 10px;display:flex;gap:10px;align-items:center;color:var(--ink);position:relative}
+.side button:hover{background:var(--surface-2)}
+.side button.active{background:var(--surface-2)}
+.side button.active::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:4px;border-radius:0 3px 3px 0;background:var(--mc)}
+.side .num{flex:none;width:26px;height:26px;border-radius:7px;background:color-mix(in srgb,var(--mc) 14%,transparent);color:var(--mc);font-size:12px;font-weight:700;display:grid;place-items:center}
+.side button.active .num{background:var(--mc);color:#fff}
+.side button.done .num{background:var(--ok);color:#fff}
+.side .t{flex:1;font-size:14px;font-weight:500}
+.side .min{font-size:12px;color:var(--muted)}
+.side-note{margin-top:12px;font-size:12px;color:var(--muted);padding:10px 12px;border-left:3px solid var(--brand);background:var(--surface);border-radius:0 8px 8px 0}
+
+main{min-width:0}
+.module{display:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.module.active{display:block}
+.mod-head{padding:22px 28px 18px;border-top:5px solid var(--mc);background:linear-gradient(180deg,color-mix(in srgb,var(--mc) 7%,var(--surface)),var(--surface))}
+.mod-body{padding:4px 28px 28px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mc);font-weight:700;margin-bottom:8px}
+.eyebrow::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--mc)}
+.lead{color:var(--muted);font-size:1rem;max-width:780px;margin:0}
+
+/* Hero */
+.hero{position:relative;background:var(--graphite);color:#fff;padding:34px 30px 30px;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:0;bottom:0;width:340px;background:linear-gradient(115deg,transparent 0 30%,var(--brand) 30% 52%,var(--brand-dark) 52% 62%,transparent 62%);opacity:.95}
+.hero > *{position:relative;z-index:1;max-width:640px}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#FF8B96;font-weight:600;margin-bottom:10px}
+.hero h1{font-size:2rem;margin-bottom:12px}
+.hero p{color:#C9CDD3;font-size:1.02rem}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.hero-meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 12px;font-size:13px}
+
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--surface)}
+.card h3{margin-bottom:.35em}
+.card p:last-child{margin-bottom:0}
+.card.accent{border-top:4px solid var(--cc,var(--brand))}
+.kpi-card{border:none;color:#fff;background:var(--cc)}
+.kpi-card .tag{background:rgba(255,255,255,.2);color:#fff}
+.kpi-card p{color:rgba(255,255,255,.85)}
+.kpi{font-size:1.6rem;font-weight:700}
+.muted{color:var(--muted)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--brand-soft);color:var(--brand);margin-bottom:6px;letter-spacing:.02em}
+
+.note{border-radius:8px;padding:12px 14px;margin:16px 0;border-left:4px solid}
+.note.info{background:var(--info-soft);border-color:var(--info)}
+.note.warn{background:var(--warn-soft);border-color:var(--warn)}
+.note.bad{background:var(--bad-soft);border-color:var(--bad)}
+.note.ok{background:var(--ok-soft);border-color:var(--ok)}
+.note b:first-child{display:block;margin-bottom:2px}
+
+.foot-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{border:1px solid var(--brand);background:var(--brand);color:#fff;border-radius:6px;padding:10px 18px;font-weight:600;transition:background .15s}
+.btn:hover{background:var(--brand-dark);border-color:var(--brand-dark)}
+.btn.sec{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.sec:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* Scheme */
+.scheme{display:grid;grid-template-columns:minmax(0,400px) 1fr;gap:20px;align-items:start}
+.scheme svg{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:linear-gradient(#EAF2FB,#F6F9FC 22%)}
+:root[data-theme="dark"] .scheme svg{background:linear-gradient(#16202C,#1B1E23 22%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .scheme svg{background:linear-gradient(#16202C,#1B1E23 22%)}}
+.part{cursor:pointer}
+.part rect.body{transition:filter .15s,stroke-width .15s}
+.part:hover rect.body{filter:brightness(1.12)}
+.part.sel rect.body{stroke:#FFD24A;stroke-width:3}
+.info-panel{position:sticky;top:92px}
+.info-panel .card{min-height:230px;border-left:5px solid var(--pc,var(--brand))}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 10px 4px 8px;font-size:13px;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.chip i{width:10px;height:10px;border-radius:3px;background:var(--pc);display:inline-block}
+.chip.sel{background:var(--pc);border-color:var(--pc);color:#fff}
+.chip.sel i{background:#fff}
+.chip.seen:not(.sel){border-color:var(--pc)}
+.seen-bar{margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.seen-bar .progress{background:var(--surface-2);width:140px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--graphite);color:#fff;font-weight:600;font-size:13px}
+tbody tr:nth-child(even) td{background:var(--surface-2)}
+tr:last-child td{border-bottom:none}
+td .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px}
+
+/* Steps */
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0;display:flex;flex-direction:column;gap:8px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:12px;transition:background .15s,border-color .15s}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:8px;background:var(--m4);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+.steps li:has(input:checked){background:var(--ok-soft);border-color:var(--ok)}
+.steps li label{display:flex;gap:10px;flex:1;cursor:pointer}
+.steps input{margin-top:4px;accent-color:var(--ok);width:16px;height:16px}
+
+/* Affinity calc */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;border-top:4px solid var(--m3)}
+input[type=range]{width:100%;accent-color:var(--brand)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;font-size:13px}
+.bar{height:14px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;transition:width .2s}
+#bQ{background:var(--info)} #bH{background:var(--m3)} #bN{background:var(--brand)}
+
+/* Diagnostics */
+.diag-card{border-top:4px solid var(--m5)}
+.diag{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:6px}
+.seg button{flex:1;border:none;background:var(--surface);padding:9px 4px;font-size:13px;color:var(--ink);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--graphite);color:#fff}
+.seg button.on[data-v="high"]{background:var(--bad)}
+.seg button.on[data-v="low"],.seg button.on[data-v="none"]{background:var(--warn)}
+.seg button.on[data-v="norm"]{background:var(--ok)}
+.diag-out{margin-top:14px}
+
+/* Safety */
+.safety .card{display:flex;gap:14px;align-items:flex-start;border-left:5px solid var(--cc)}
+.safety .ico{flex:none;width:40px;height:40px;border-radius:10px;background:var(--cc);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px}
+
+/* Quiz */
+.q{border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px;border-left:4px solid var(--m7)}
+.q h3{font-size:1rem}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:6px;border:1px solid transparent;cursor:pointer}
+.opt:hover{background:var(--surface-2)}
+.opt input{margin-top:4px;accent-color:var(--m7)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.expl{display:none;font-size:13px;color:var(--muted);margin-top:8px}
+.checked .expl{display:block}
+.result{display:none;border-top:5px solid var(--rc,var(--ok))}
+.result.show{display:block}
+.score{font-size:2.2rem;font-weight:700}
+
+.cheat{background:var(--graphite);color:#fff;border:none}
+.cheat ul{padding-left:18px}
+.cheat li{margin-bottom:6px}
+.cheat li::marker{color:#FF4D5E}
+.cheat .btn.sec{color:#fff;border-color:rgba(255,255,255,.35)}
+footer{max-width:1200px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--muted)}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  nav.side{position:static}
+  .side ol{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .side button{white-space:nowrap}
+  .side button.active::before{display:none}
+  .side .min,.side-note,.side-title{display:none}
+  .scheme,.calc{grid-template-columns:1fr}
+  .info-panel{position:static}
+  .g3{grid-template-columns:1fr 1fr}
+  .top-stats{margin-left:0;width:100%}
+  .hero::after{width:200px;right:-90px}
+}
+@media (max-width:600px){
+  .mod-head{padding:18px}
+  .mod-body{padding:4px 18px 20px}
+  .hero{padding:24px 18px}
+  .hero h1{font-size:1.5rem}
+  .g2,.g3,.diag{grid-template-columns:1fr}
+  .progress{width:90px}
+  .brand-name{font-size:15px}
+}
+@media print{
+  .top,nav.side,.foot-nav,footer{display:none}
+  .wrap{display:block}
+  .module{display:block;box-shadow:none;page-break-after:always}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <img src="logo.svg" alt="" onerror="this.remove()">
+      <span class="brand-name">ЛУКОЙЛ</span>
+      <span class="brand-div"></span>
+      <div class="brand-course">Курс оператора УЭЦН<small>Экспресс-обучение персонала · 15 минут</small></div>
+    </div>
+    <div class="top-stats">
+      <span class="timer-box" id="timer">15:00</span>
+      <span class="stat">Пройдено: <b id="doneCount">0</b> из 7</span>
+      <div class="progress" aria-label="Прогресс"><span id="progBar"></span></div>
+      <button class="btn-ghost" id="themeBtn" title="Сменить тему">Тема</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="side" aria-label="Модули курса">
+    <div class="side-card">
+      <div class="side-title">Программа курса</div>
+      <ol id="navList"></ol>
+    </div>
+    <div class="side-note">Материал учебный. В работе руководствуйтесь инструкциями и регламентами Общества.</div>
+  </nav>
+
+  <main>
+
+  <!-- 1 -->
+  <section class="module" data-min="1" data-title="Введение" style="--mc:var(--m1)">
+    <div class="hero">
+      <div class="kicker">Механизированная добыча · Модуль 1</div>
+      <h1>Эксплуатация УЭЦН: базовый курс оператора</h1>
+      <p>Установка электроцентробежного насоса — погружной многоступенчатый насос с электродвигателем, спущенный в скважину на НКТ. Он поднимает пластовую жидкость, когда энергии пласта для фонтанирования недостаточно.</p>
+      <div class="hero-meta"><span>7 модулей</span><span>≈ 15 минут</span><span>Интерактивная схема</span><span>Итоговый тест</span></div>
+    </div>
+    <div class="mod-body" style="padding-top:22px">
+      <div class="grid g3">
+        <div class="card kpi-card" style="--cc:var(--m1)"><span class="tag">Подача</span><div class="kpi">15–1000+</div><p>м³/сут — широкий ряд типоразмеров</p></div>
+        <div class="card kpi-card" style="--cc:var(--m2)"><span class="tag">Напор</span><div class="kpi">до ~3500 м</div><p>за счёт сотен последовательных ступеней</p></div>
+        <div class="card kpi-card" style="--cc:var(--graphite-2)"><span class="tag">Фонд</span><div class="kpi">основной</div><p>способ механизированной добычи в России</p></div>
+      </div>
+
+      <h3 style="margin-top:22px">Роль оператора</h3>
+      <div class="grid g2">
+        <div class="card accent" style="--cc:var(--m2)"><h3>Контролировать</h3><p>Ток, загрузку, давление на приёме, дебит, состояние наземного оборудования. Записывать параметры в журнал.</p></div>
+        <div class="card accent" style="--cc:var(--m5)"><h3>Реагировать</h3><p>Распознать отклонение, выполнить действия по инструкции и вовремя сообщить технологу или мастеру.</p></div>
+      </div>
+
+      <div class="note bad"><b>Главный принцип</b>Погружной двигатель охлаждается только потоком жидкости. Нет подачи — нет охлаждения — перегрев и отказ. Большинство аварий развивается из «безобидного» отклонения, которое не заметили.</div>
+
+      <div class="foot-nav"><span class="muted">Далее: устройство установки</span><button class="btn" data-next>Начать обучение →</button></div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="module" data-min="4" data-title="Устройство УЭЦН" style="--mc:var(--m2)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 2 · 4 мин</div>
+      <h2>Устройство установки</h2>
+      <p class="lead">Нажимайте на элементы схемы или на цветные кнопки справа. Изучите все 13 узлов — полоса прогресса покажет, сколько осталось.</p>
+    </div>
+    <div class="mod-body">
+    <div class="scheme" style="margin-top:16px">
+      <div>
+      <svg viewBox="0 0 400 660" role="img" aria-label="Схема УЭЦН в скважине">
+        <defs>
+          <pattern id="rock" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="var(--earth-3)"/><circle cx="4" cy="4" r="1.3" fill="var(--oil)" opacity=".5"/><circle cx="11" cy="10" r="1.3" fill="var(--oil)" opacity=".5"/></pattern>
+          <linearGradient id="fluid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--oil)" stop-opacity=".35"/><stop offset="1" stop-color="var(--oil)" stop-opacity=".7"/></linearGradient>
+          <linearGradient id="steel" x1="0" x2="1"><stop offset="0" stop-color="#9AA1AB"/><stop offset=".5" stop-color="#D5D9DF"/><stop offset="1" stop-color="#9AA1AB"/></linearGradient>
+        </defs>
+        <!-- strata -->
+        <rect x="0" y="150" width="400" height="140" fill="var(--earth-1)"/>
+        <rect x="0" y="290" width="400" height="180" fill="var(--earth-2)"/>
+        <rect x="0" y="470" width="400" height="130" fill="var(--earth-1)"/>
+        <rect x="0" y="600" width="400" height="40" fill="url(#rock)"/>
+        <rect x="0" y="640" width="400" height="20" fill="var(--earth-2)"/>
+        <line x1="0" y1="150" x2="400" y2="150" stroke="var(--graphite-2)" stroke-width="3"/>
+        <text x="8" y="146" font-size="11" fill="var(--muted)">поверхность</text>
+        <text x="8" y="622" font-size="11" font-weight="600" fill="var(--oil)">продуктивный пласт</text>
+
+        <!-- casing + fluid -->
+        <rect x="246" y="150" width="68" height="490" fill="var(--surface)"/>
+        <rect x="246" y="250" width="68" height="390" fill="url(#fluid)"/>
+        <rect x="246" y="150" width="68" height="490" fill="none" stroke="var(--graphite-2)" stroke-width="3"/>
+        <line x1="246" y1="250" x2="314" y2="250" stroke="var(--info)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="320" y="254" font-size="10" font-weight="600" fill="var(--info)">Hдин</text>
+        <text x="320" y="200" font-size="10" fill="var(--muted)">обсадная</text>
+        <text x="320" y="212" font-size="10" fill="var(--muted)">колонна</text>
+        <g stroke="var(--oil)" stroke-width="3" stroke-linecap="round">
+          <line x1="232" y1="608" x2="244" y2="608"/><line x1="232" y1="620" x2="244" y2="620"/><line x1="232" y1="632" x2="244" y2="632"/>
+          <line x1="316" y1="608" x2="328" y2="608"/><line x1="316" y1="620" x2="328" y2="620"/><line x1="316" y1="632" x2="328" y2="632"/>
+        </g>
+
+        <!-- tubing -->
+        <rect x="272" y="96" width="16" height="190" fill="url(#steel)" stroke="var(--graphite-2)"/>
+
+        <!-- cable -->
+        <path d="M160 80 L210 80 L210 118 L302 118 L302 560" fill="none" stroke="var(--c-kvz)" stroke-width="3" stroke-dasharray="6 3"/>
+
+        <!-- surface parts -->
+        <g class="part" data-id="su">
+          <rect class="body" x="14" y="46" width="80" height="68" rx="6" fill="var(--c-su)" stroke="none"/>
+          <rect x="24" y="56" width="36" height="16" rx="2" fill="#7CE0A3"/>
+          <circle cx="76" cy="64" r="5" fill="#7CE0A3"/>
+          <text x="54" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">СУ</text>
+          <text x="54" y="106" text-anchor="middle" font-size="9" fill="#C9CDD3">станция упр.</text>
+        </g>
+        <line x1="94" y1="80" x2="106" y2="80" stroke="var(--graphite-2)" stroke-width="3"/>
+        <g class="part" data-id="tmpn">
+          <rect class="body" x="106" y="46" width="54" height="68" rx="6" fill="var(--c-tmpn)" stroke="none"/>
+          <g stroke="#fff" stroke-opacity=".35"><line x1="114" y1="58" x2="152" y2="58"/><line x1="114" y1="64" x2="152" y2="64"/><line x1="114" y1="70" x2="152" y2="70"/></g>
+          <text x="133" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">ТМПН</text>
+          <text x="133" y="106" text-anchor="middle" font-size="9" fill="#DCE5DF">трансф.</text>
+        </g>
+        <g class="part" data-id="kvz">
+          <rect class="body" x="186" y="64" width="38" height="32" rx="4" fill="var(--c-kvz)" stroke="none"/>
+          <text x="205" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">КВЗ</text>
+        </g>
+        <g class="part" data-id="ustye">
+          <rect x="236" y="124" width="18" height="10" fill="var(--graphite-2)"/>
+          <rect x="306" y="124" width="34" height="10" fill="var(--graphite-2)"/>
+          <rect class="body" x="252" y="110" width="56" height="40" rx="4" fill="var(--c-valve)" stroke="none"/>
+          <circle cx="280" cy="130" r="8" fill="none" stroke="#fff" stroke-width="2"/>
+          <text x="280" y="104" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)">устье</text>
+          <text x="344" y="132" font-size="9" fill="var(--muted)">в линию →</text>
+        </g>
+
+        <!-- downhole parts -->
+        <g class="part" data-id="nkt">
+          <rect class="body" x="272" y="170" width="16" height="110" fill="transparent" stroke="none"/>
+          <line x1="236" y1="226" x2="272" y2="226" stroke="var(--muted)"/>
+          <text x="232" y="230" text-anchor="end" font-size="11" font-weight="600" fill="var(--ink)">НКТ</text>
+        </g>
+        <g class="part" data-id="sliv">
+          <rect class="body" x="266" y="286" width="28" height="16" rx="3" fill="var(--c-valve)" stroke="none"/>
+          <line x1="236" y1="294" x2="266" y2="294" stroke="var(--muted)"/>
+          <text x="232" y="298" text-anchor="end" font-size="11" fill="var(--ink)">Сливной клапан</text>
+        </g>
+        <g class="part" data-id="obr">
+          <rect class="body" x="266" y="308" width="28" height="16" rx="3" fill="var(--c-valve)" stroke="none"/>
+          <path d="M273 320 l7 -8 l7 8" fill="none" stroke="#fff" stroke-width="1.5"/>
+          <line x1="236" y1="316" x2="266" y2="316" stroke="var(--muted)"/>
+          <text x="232" y="320" text-anchor="end" font-size="11" fill="var(--ink)">Обратный клапан</text>
+        </g>
+        <g class="part" data-id="nasos">
+          <rect class="body" x="262" y="330" width="36" height="120" rx="4" fill="var(--c-pump)" stroke="none"/>
+          <g stroke="#fff" stroke-opacity=".45" stroke-width="1.2">
+            <line x1="266" y1="345" x2="294" y2="345"/><line x1="266" y1="360" x2="294" y2="360"/><line x1="266" y1="375" x2="294" y2="375"/>
+            <line x1="266" y1="390" x2="294" y2="390"/><line x1="266" y1="405" x2="294" y2="405"/><line x1="266" y1="420" x2="294" y2="420"/><line x1="266" y1="435" x2="294" y2="435"/>
+          </g>
+          <line x1="236" y1="390" x2="262" y2="390" stroke="var(--muted)"/>
+          <text x="232" y="394" text-anchor="end" font-size="12" font-weight="700" fill="var(--c-pump)">ЭЦН (насос)</text>
+        </g>
+        <g class="part" data-id="gs">
+          <rect class="body" x="262" y="456" width="36" height="36" rx="4" fill="var(--c-gs)" stroke="none"/>
+          <g fill="#fff" opacity=".8"><circle cx="271" cy="480" r="2.5"/><circle cx="280" cy="474" r="2"/><circle cx="289" cy="481" r="2.5"/></g>
+          <line x1="236" y1="474" x2="262" y2="474" stroke="var(--muted)"/>
+          <text x="232" y="470" text-anchor="end" font-size="11" fill="var(--ink)">Газосепаратор /</text>
+          <text x="232" y="483" text-anchor="end" font-size="11" fill="var(--ink)">входной модуль</text>
+        </g>
+        <g class="part" data-id="gz">
+          <rect class="body" x="262" y="498" width="36" height="40" rx="4" fill="var(--c-gz)" stroke="none"/>
+          <line x1="236" y1="518" x2="262" y2="518" stroke="var(--muted)"/>
+          <text x="232" y="522" text-anchor="end" font-size="11" fill="var(--ink)">Гидрозащита</text>
+        </g>
+        <g class="part" data-id="ped">
+          <rect class="body" x="262" y="544" width="36" height="46" rx="4" fill="var(--c-ped)" stroke="none"/>
+          <text x="280" y="571" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">ПЭД</text>
+          <line x1="236" y1="567" x2="262" y2="567" stroke="var(--muted)"/>
+          <text x="232" y="571" text-anchor="end" font-size="12" font-weight="700" fill="var(--c-ped)">Электродвигатель</text>
+        </g>
+        <g class="part" data-id="tms">
+          <rect class="body" x="266" y="594" width="28" height="14" rx="3" fill="var(--c-tms)" stroke="none"/>
+          <line x1="236" y1="601" x2="266" y2="601" stroke="var(--muted)"/>
+          <text x="232" y="605" text-anchor="end" font-size="11" fill="var(--ink)">ТМС (датчики)</text>
+        </g>
+        <g class="part" data-id="kabel">
+          <rect class="body" x="297" y="160" width="12" height="120" fill="transparent" stroke="none"/>
+          <text x="320" y="170" font-size="10" font-weight="600" fill="var(--c-kvz)">кабель</text>
+        </g>
+        <!-- flow -->
+        <g fill="var(--info)">
+          <path d="M254 600 l6 -9 l6 9z"/><path d="M306 600 l-6 -9 l-6 9z"/>
+          <path d="M254 540 l6 -9 l6 9z" opacity=".6"/><path d="M306 540 l-6 -9 l-6 9z" opacity=".6"/>
+        </g>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--oil);opacity:.6"></i>пластовая жидкость</span>
+        <span><i style="background:var(--info)"></i>направление потока</span>
+        <span><i style="background:var(--c-kvz)"></i>кабельная линия</span>
+      </div>
+      </div>
+
+      <div class="info-panel">
+        <div class="card" id="partInfo">
+          <span class="tag">Выберите узел</span>
+          <h3>Схема УЭЦН</h3>
+          <p>Установка делится на <b>подземную часть</b> (насос, газосепаратор, гидрозащита, двигатель, датчики, кабель, клапаны) и <b>наземную часть</b> (станция управления, трансформатор, клеммная коробка, устьевая арматура).</p>
+          <p class="muted">Поток: жидкость из пласта поднимается по обсадной колонне, омывает и охлаждает двигатель, поступает на приём насоса и по НКТ уходит на поверхность.</p>
+        </div>
+        <div class="chips" id="partChips"></div>
+        <div class="seen-bar"><div class="progress"><span id="seenBar"></span></div><span id="seenCount"></span></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px">Как работает ступень насоса</h3>
+    <div class="grid g2">
+      <div class="card accent" style="--cc:var(--c-pump)"><h3>Рабочее колесо</h3><p>Вращается на валу и передаёт жидкости энергию, отбрасывая её центробежной силой к периферии.</p></div>
+      <div class="card accent" style="--cc:var(--c-gs)"><h3>Направляющий аппарат</h3><p>Неподвижен. Преобразует скорость жидкости в давление и направляет поток на следующее колесо. Напор всех ступеней складывается.</p></div>
+    </div>
+
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><button class="btn" data-next>Далее →</button></div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="module" data-min="3" data-title="Параметры и защиты" style="--mc:var(--m3)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 3 · 3 мин</div>
+      <h2>Контролируемые параметры и защиты</h2>
+      <p class="lead">Оператор «видит» погружное оборудование только через параметры станции управления, ТМС и замеры на устье. Поэтому их нужно уметь читать.</p>
+    </div>
+    <div class="mod-body">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Параметр</th><th>Где смотреть</th><th>Что показывает</th><th>Тревожный признак</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:var(--brand)"></span><b>Рабочий ток ПЭД</b>, А</td><td>СУ</td><td>Нагрузку на двигатель — главный индикатор работы насоса</td><td>Резкий рост или падение относительно рабочего значения</td></tr>
+        <tr><td><span class="dot" style="background:var(--brand)"></span><b>Загрузка ПЭД</b>, %</td><td>СУ</td><td>Отношение фактической нагрузки к номинальной</td><td>Выход за уставки перегруза/недогруза</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-kvz)"></span><b>Сопротивление изоляции</b></td><td>СУ, мегаомметр</td><td>Состояние кабеля и обмоток двигателя</td><td>Снижение ниже уставки, падающий тренд</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-kvz)"></span><b>Напряжение, дисбаланс</b></td><td>СУ</td><td>Качество питания</td><td>Перекос фаз, просадки напряжения</td></tr>
+        <tr><td><span class="dot" style="background:var(--info)"></span><b>Давление на приёме</b> / Hдин</td><td>ТМС, эхолот</td><td>Сколько жидкости над насосом</td><td>Падение до минимально допустимого значения</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-ped)"></span><b>Температура ПЭД</b></td><td>ТМС</td><td>Условия охлаждения двигателя</td><td>Рост температуры без изменения режима</td></tr>
+        <tr><td><span class="dot" style="background:var(--ok)"></span><b>Дебит</b></td><td>АГЗУ / замерная установка</td><td>Фактическую подачу</td><td>Снижение подачи при неизменном режиме</td></tr>
+        <tr><td><span class="dot" style="background:var(--ok)"></span><b>Буферное и затрубное давление</b></td><td>Манометры на устье</td><td>Работу выкидной линии и затрубного пространства</td><td>Рост буферного — препятствие в линии; рост затрубного — скопление газа</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 style="margin-top:22px">Частота вращения и режим (при ЧРП)</h3>
+    <p>Станция с частотным регулированием позволяет менять режим без подъёма оборудования. Изменение частоты влияет на параметры неодинаково — подвигайте ползунок.</p>
+    <div class="card calc">
+      <div>
+        <label for="freq"><b>Частота: <span id="fVal">50</span> Гц</b></label>
+        <input type="range" id="freq" min="35" max="65" value="50" step="1">
+        <p class="muted" style="font-size:13px;margin-top:8px">Подача ∝ f, напор ∝ f², мощность ∝ f³ (законы подобия, приближённо). Базовая точка — 50 Гц = 100%.</p>
+      </div>
+      <div class="bars">
+        <div class="bar-row"><span>Подача</span><div class="bar"><span id="bQ"></span></div><b id="vQ">100%</b></div>
+        <div class="bar-row"><span>Напор</span><div class="bar"><span id="bH"></span></div><b id="vH">100%</b></div>
+        <div class="bar-row"><span>Мощность</span><div class="bar"><span id="bN"></span></div><b id="vN">100%</b></div>
+      </div>
+    </div>
+    <div class="note warn"><b>Частоту меняет только технолог или по его распоряжению</b>Повышение частоты на 10% увеличивает потребляемую мощность примерно на треть. Это риск перегруза двигателя и срыва подачи при недостаточном притоке.</div>
+
+    <h3 style="margin-top:22px">Основные защиты станции управления</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Защита</th><th>Срабатывает при</th><th>Вероятная причина</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:var(--bad)"></span><b>Перегруз (ЗП)</b></td><td>Ток выше уставки</td><td>Мехпримеси, отложения солей/АСПО, высокая вязкость, подклинивание</td></tr>
+        <tr><td><span class="dot" style="background:var(--warn)"></span><b>Недогруз / срыв подачи (ЗСП)</b></td><td>Ток ниже уставки</td><td>Газ на приёме, низкий уровень, закрытая задвижка, слом вала</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-kvz)"></span><b>Снижение изоляции</b></td><td>Сопротивление ниже уставки</td><td>Повреждение кабеля, муфты, обмоток ПЭД, попадание жидкости</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-kvz)"></span><b>Дисбаланс / обрыв фазы</b></td><td>Перекос токов или напряжений</td><td>Неисправность сети, кабеля, контактов</td></tr>
+        <tr><td><span class="dot" style="background:var(--info)"></span><b>По давлению на приёме</b></td><td>Pпр ниже уставки</td><td>Отбор больше притока — уровень снижается к насосу</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-ped)"></span><b>По температуре ПЭД</b></td><td>Перегрев двигателя</td><td>Недостаточное охлаждение, перегруз</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-valve)"></span><b>Турбинное вращение</b></td><td>Вращение ротора без питания</td><td>Слив жидкости через насос при негерметичном обратном клапане</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note info"><b>АПВ — автоматическое повторное включение</b>После некоторых защит СУ сама перезапускает установку через заданное время. Число попыток ограничено. Если установка остановилась «без АПВ» — нужен анализ причины, а не просто повторный пуск.</div>
+
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><button class="btn" data-next>Далее →</button></div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="module" data-min="2" data-title="Пуск и контроль" style="--mc:var(--m4)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 4 · 2 мин</div>
+      <h2>Пуск и вывод на режим</h2>
+      <p class="lead">Типовая последовательность действий. Отмечайте шаги — выполненные подсвечиваются зелёным.</p>
+    </div>
+    <div class="mod-body">
+    <ol class="steps" id="startSteps">
+      <li><label><input type="checkbox"> <span><b>Получить распоряжение</b> на пуск от мастера/технолога. Уточнить режим и уставки.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Внешний осмотр</b>: устьевая арматура, кабель, КВЗ, ТМПН, СУ. Нет утечек, повреждений, посторонних лиц.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Проверить задвижки</b>: выкидная линия открыта. Пуск на закрытую задвижку недопустим.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Убедиться в отсутствии турбинного вращения</b>. Пуск при обратном вращении ротора запрещён.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Проверить изоляцию</b> системы «кабель–ПЭД» по показаниям СУ или силами электротехнического персонала.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Пуск со станции управления.</b> Первые минуты — непрерывный контроль тока и загрузки.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Контроль подачи</b>: рост давления на устье, приход жидкости. Подачи нет при нормальном токе — возможно неверное направление вращения или негерметичность НКТ.</span></label></li>
+      <li><label><input type="checkbox"> <span><b>Вывод на режим</b>: контроль Pпр/Hдин, тока, дебита до стабилизации. Запись параметров в вахтовый журнал.</span></label></li>
+    </ol>
+    <div class="note ok" id="stepsDone" style="display:none"><b>Последовательность пройдена</b>Запомните: осмотр → задвижки → турбинное вращение → изоляция → пуск → контроль тока → контроль подачи → режим.</div>
+
+    <h3 style="margin-top:22px">Ежедневный контроль при обходе</h3>
+    <div class="grid g2">
+      <div class="card accent" style="--cc:var(--c-su)"><h3>На станции управления</h3><p>Ток по фазам, загрузка, изоляция, частота, журнал событий и остановок, давление и температура по ТМС.</p></div>
+      <div class="card accent" style="--cc:var(--c-valve)"><h3>На устье</h3><p>Буферное, затрубное и линейное давление, герметичность арматуры и кабельного ввода, отсутствие посторонних звуков.</p></div>
+    </div>
+
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><button class="btn" data-next>Далее →</button></div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="module" data-min="3" data-title="Осложнения" style="--mc:var(--m5)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 5 · 3 мин</div>
+      <h2>Осложнения и диагностика</h2>
+      <p class="lead">Тренажёр: выберите, что вы видите на скважине, и получите вероятную причину и порядок действий.</p>
+    </div>
+    <div class="mod-body">
+    <div class="card diag-card" style="margin-top:16px">
+      <div class="diag">
+        <div><b>Рабочий ток</b><div class="seg" data-k="i"><button data-v="low">Ниже</button><button data-v="norm" class="on">Норма</button><button data-v="high">Выше</button></div></div>
+        <div><b>Подача (дебит)</b><div class="seg" data-k="q"><button data-v="none">Нет</button><button data-v="low">Снижена</button><button data-v="norm" class="on">Норма</button></div></div>
+        <div><b>Давление в линии</b><div class="seg" data-k="p"><button data-v="norm" class="on">Норма</button><button data-v="high">Повышено</button></div></div>
+      </div>
+      <div class="diag-out" id="diagOut"></div>
+    </div>
+
+    <h3 style="margin-top:22px">Основные осложнения</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Осложнение</th><th>Признаки</th><th>Действия оператора</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:var(--c-gs)"></span><b>Свободный газ на приёме</b></td><td>Колебания и снижение тока, пульсации подачи, рост затрубного давления</td><td>Сообщить технологу; стравливание затрубного газа по регламенту; возможна смена режима</td></tr>
+        <tr><td><span class="dot" style="background:var(--warn)"></span><b>Срыв подачи</b></td><td>Ток падает до уровня холостого хода, подача прекращается, срабатывает ЗСП</td><td>Не перезапускать многократно; проверить уровень (Hдин/Pпр); сообщить технологу</td></tr>
+        <tr><td><span class="dot" style="background:var(--oil)"></span><b>Мехпримеси (песок, проппант)</b></td><td>Рост и нестабильность тока, вибрация, износ — снижение подачи</td><td>Контроль КВЧ по пробам; сообщить; не допускать частых пусков-остановок</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-valve)"></span><b>Солеотложения</b></td><td>Постепенное снижение подачи и рост тока, возможен клин</td><td>Контроль дозирования ингибитора; сообщить при росте тока</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-ped)"></span><b>АСПО (парафин)</b></td><td>Рост буферного давления, снижение подачи</td><td>Контроль графика депарафинизации (скребкование, горячие обработки)</td></tr>
+        <tr><td><span class="dot" style="background:var(--c-kvz)"></span><b>Снижение изоляции</b></td><td>Падение сопротивления, отключение по защите</td><td>Не включать повторно; вызвать электротехнический персонал</td></tr>
+        <tr><td><span class="dot" style="background:var(--bad)"></span><b>Заклинивание (клин)</b></td><td>Резкий бросок тока при пуске, установка не запускается</td><td>Не выполнять попытки «расклинить» без распоряжения; сообщить</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note bad"><b>Запрещено</b>Многократно запускать установку после отключения по защите без выяснения причины. Каждый неудачный пуск — тепловой и механический удар по двигателю и кабелю.</div>
+
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><button class="btn" data-next>Далее →</button></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="module" data-min="1" data-title="Безопасность" style="--mc:var(--m6)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 6 · 1 мин</div>
+      <h2>Промышленная и электробезопасность</h2>
+      <p class="lead">Безопасность — первый приоритет при любых работах на скважине.</p>
+    </div>
+    <div class="mod-body">
+    <div class="grid g2 safety" style="margin-top:16px">
+      <div class="card" style="--cc:var(--bad)"><div class="ico">⚡</div><div><h3>Высокое напряжение</h3><p>На выходе ТМПН — напряжение в несколько киловольт. Открывать СУ, ТМПН и КВЗ, работать с кабелем — только допущенный электротехнический персонал.</p></div></div>
+      <div class="card" style="--cc:var(--warn)"><div class="ico">P</div><div><h3>Устье под давлением</h3><p>Не подтягивать соединения и не разбирать арматуру под давлением. Манипуляции с задвижками — по инструкции.</p></div></div>
+      <div class="card" style="--cc:var(--m7)"><div class="ico">H₂S</div><div><h3>Сероводород и углеводороды</h3><p>Газоанализатор и СИЗОД там, где требуется. Подход к устью с наветренной стороны.</p></div></div>
+      <div class="card" style="--cc:var(--info)"><div class="ico">✓</div><div><h3>Допуск и связь</h3><p>Работы — по наряду-допуску, где он требуется. О любых нарушениях — немедленно мастеру.</p></div></div>
+    </div>
+    <div class="note bad"><b>Кабель под напряжением даже на остановленной скважине</b>Считайте его таковым, пока электротехнический персонал не выполнил отключение, проверку отсутствия напряжения и заземление.</div>
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><button class="btn" data-next>К тесту →</button></div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="module" data-min="2" data-title="Итоговый тест" style="--mc:var(--m7)">
+    <div class="mod-head">
+      <div class="eyebrow">Модуль 7 · 2 мин</div>
+      <h2>Итоговый тест</h2>
+      <p class="lead">10 вопросов. Для зачёта нужно 8 правильных ответов.</p>
+    </div>
+    <div class="mod-body" style="padding-top:18px">
+    <div id="quiz"></div>
+    <div class="foot-nav" style="border-top:none;padding-top:0;margin-top:8px">
+      <button class="btn sec" id="quizReset">Пройти заново</button>
+      <button class="btn" id="quizCheck">Проверить ответы</button>
+    </div>
+    <div class="result card" id="quizResult"></div>
+
+    <h3 style="margin-top:26px">Памятка оператора</h3>
+    <div class="card cheat">
+      <ul>
+        <li>Ток — главный индикатор. <b>Выше нормы</b> — перегруз (мехпримеси, отложения, вязкость). <b>Ниже нормы</b> — газ, низкий уровень, закрытая задвижка, слом вала.</li>
+        <li>Нет подачи — нет охлаждения ПЭД.</li>
+        <li>Перед пуском: задвижки открыты, нет турбинного вращения, изоляция в норме.</li>
+        <li>Остановка по защите — сначала причина, потом пуск.</li>
+        <li>Частоту, уставки и режим меняет технолог.</li>
+        <li>СУ, ТМПН, КВЗ и кабель — зона электротехнического персонала.</li>
+      </ul>
+      <button class="btn sec" onclick="window.print()">Распечатать курс</button>
+    </div>
+    <div class="foot-nav"><button class="btn sec" data-prev>← Назад</button><span class="muted">Конец курса</span></div>
+    </div>
+  </section>
+
+  </main>
+</div>
+<footer>Учебный материал для первичного ознакомления персонала. Уставки, нормы и порядок действий определяются инструкциями по эксплуатации оборудования и локальными нормативными документами Общества.</footer>
+
+<script>
+(function(){
+  const modules=[...document.querySelectorAll('.module')];
+  const navList=document.getElementById('navList');
+  const done=new Set();
+  let current=0;
+
+  modules.forEach((m,i)=>{
+    const li=document.createElement('li');
+    li.innerHTML='<button style="--mc:'+getComputedStyle(m).getPropertyValue('--mc')+'" data-i="'+i+'"><span class="num">'+(i+1)+'</span><span class="t">'+m.dataset.title+'</span><span class="min">'+m.dataset.min+' мин</span></button>';
+    navList.appendChild(li);
+  });
+  const navBtns=[...navList.querySelectorAll('button')];
+  navBtns.forEach(b=>b.addEventListener('click',()=>show(+b.dataset.i)));
+
+  function show(i){
+    modules[current].classList.remove('active');
+    navBtns[current].classList.remove('active');
+    current=i;
+    modules[i].classList.add('active');
+    navBtns[i].classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    startTimer();
+  }
+  function markDone(i){
+    done.add(i);
+    navBtns[i].classList.add('done');
+    document.getElementById('doneCount').textContent=done.size;
+    document.getElementById('progBar').style.width=(done.size/modules.length*100)+'%';
+  }
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{markDone(current);if(current<modules.length-1)show(current+1);}));
+  document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>{if(current>0)show(current-1);}));
+  modules[0].classList.add('active');navBtns[0].classList.add('active');
+
+  // Timer
+  let left=15*60, tId=null;
+  const tEl=document.getElementById('timer');
+  function startTimer(){
+    if(tId) return;
+    tId=setInterval(()=>{
+      left--;
+      if(left<=0){left=0;clearInterval(tId);tEl.style.color='var(--bad)';}
+      const m=Math.floor(left/60), s=left%60;
+      tEl.textContent=m+':'+String(s).padStart(2,'0');
+    },1000);
+  }
+
+  // Theme
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    const r=document.documentElement;
+    const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    r.dataset.theme=dark?'light':'dark';
+  });
+
+  // Parts
+  const parts={
+    su:{c:'--c-su',g:'Наземное',t:'Станция управления (СУ)',d:'Питает и управляет двигателем, реализует защиты (перегруз, недогруз, изоляция, дисбаланс), ведёт журнал событий. Часто со встроенным частотным преобразователем (ЧРП) для плавного пуска и регулирования режима.',o:'Снимать показания тока, загрузки, изоляции; смотреть журнал остановок.'},
+    tmpn:{c:'--c-tmpn',g:'Наземное',t:'Трансформатор (ТМПН)',d:'Повышает напряжение сети до рабочего напряжения погружного двигателя с учётом потерь в длинном кабеле.',o:'Внешний осмотр: уровень масла, отсутствие течей и посторонних шумов. Доступ внутрь — только электротехническому персоналу.'},
+    kvz:{c:'--c-kvz',g:'Наземное',t:'Клеммная коробка (КВЗ)',d:'Соединяет силовой кабель скважины с кабелем от трансформатора. Вентилируемая конструкция не даёт попутному газу, прошедшему по кабелю, попасть в станцию управления.',o:'Проверять целостность и отсутствие загазованности. Не открывать под напряжением.'},
+    ustye:{c:'--c-valve',g:'Наземное',t:'Устьевая арматура',d:'Герметизирует устье, подвешивает НКТ, обеспечивает герметичный ввод кабеля и направляет жидкость в выкидную линию. Имеет манометры буферного и затрубного давления.',o:'Контроль давлений, положения задвижек, герметичности кабельного ввода.'},
+    nkt:{c:'--graphite-2',g:'Подземное',t:'Насосно-компрессорные трубы (НКТ)',d:'Колонна труб, на которой спущена установка. По НКТ жидкость поднимается от насоса на поверхность.',o:'Негерметичность НКТ проявляется так: ток нормальный, а подачи нет или она резко снижена.'},
+    sliv:{c:'--c-valve',g:'Подземное',t:'Сливной (сбивной) клапан',d:'Устанавливается выше обратного. Перед подъёмом установки его открывают (сбивают), чтобы слить жидкость из НКТ и не поднимать трубы с жидкостью.',o:'Преждевременное открытие даёт картину негерметичности НКТ.'},
+    obr:{c:'--c-valve',g:'Подземное',t:'Обратный клапан',d:'Удерживает столб жидкости в НКТ при остановке. Не допускает слива через насос и обратного (турбинного) вращения ротора.',o:'Если клапан негерметичен — после остановки возможно турбинное вращение; пуск в этот момент запрещён.'},
+    nasos:{c:'--c-pump',g:'Подземное',t:'Электроцентробежный насос (ЭЦН)',d:'Многоступенчатый центробежный насос из одной или нескольких секций. Каждая ступень — рабочее колесо и направляющий аппарат; ступеней может быть несколько сотен. Напор ступеней суммируется.',o:'Износ ступеней мехпримесями и отложения солей постепенно снижают подачу.'},
+    gs:{c:'--c-gs',g:'Подземное',t:'Газосепаратор / входной модуль',d:'Входной модуль — приём жидкости в насос. Газосепаратор дополнительно отделяет свободный газ и отводит его в затрубное пространство, снижая риск срыва подачи.',o:'Признак газа на приёме — колебания тока и пульсация подачи, рост затрубного давления.'},
+    gz:{c:'--c-gz',g:'Подземное',t:'Гидрозащита (протектор + компенсатор)',d:'Защищает двигатель от проникновения пластовой жидкости, выравнивает давление внутри ПЭД с давлением в скважине и компенсирует тепловое расширение масла.',o:'Отказ гидрозащиты ведёт к обводнению масла ПЭД и снижению изоляции.'},
+    ped:{c:'--c-ped',g:'Подземное',t:'Погружной электродвигатель (ПЭД)',d:'Маслонаполненный асинхронный или вентильный двигатель. Охлаждается потоком пластовой жидкости, проходящей мимо корпуса к приёму насоса.',o:'Без потока жидкости двигатель перегревается за короткое время. Контроль тока и температуры — обязателен.'},
+    tms:{c:'--c-tms',g:'Подземное',t:'Система телеметрии (ТМС)',d:'Погружной блок датчиков: давление и температура на приёме, температура двигателя, вибрация. Данные передаются в СУ по силовому кабелю.',o:'По давлению на приёме оценивают уровень жидкости над насосом без замера эхолотом.'},
+    kabel:{c:'--c-kvz',g:'Подземное',t:'Кабельная линия',d:'Основной круглый или плоский кабель вдоль НКТ и плоский удлинитель вдоль насоса и гидрозащиты, с муфтой ввода в двигатель. Крепится к НКТ поясами или протекторами.',o:'Повреждение кабеля — одна из основных причин снижения изоляции и отказов.'}
+  };
+  const seen=new Set();
+  const chips=document.getElementById('partChips');
+  Object.keys(parts).forEach(k=>{
+    const b=document.createElement('button');b.className='chip';b.style.setProperty('--pc','var('+parts[k].c+')');b.innerHTML='<i></i>'+parts[k].t.replace(/\s*\(.*\)/,'');b.dataset.id=k;
+    b.addEventListener('click',()=>selectPart(k));chips.appendChild(b);
+  });
+  document.querySelectorAll('.part').forEach(g=>g.addEventListener('click',()=>selectPart(g.dataset.id)));
+  function selectPart(k){
+    const p=parts[k];seen.add(k);
+    document.querySelectorAll('.part').forEach(g=>g.classList.toggle('sel',g.dataset.id===k));
+    chips.querySelectorAll('.chip').forEach(c=>{c.classList.toggle('sel',c.dataset.id===k);if(c.dataset.id===k)c.classList.add('seen');});
+    document.getElementById('partInfo').style.setProperty('--pc','var('+p.c+')');
+    document.getElementById('partInfo').innerHTML='<span class="tag" style="background:var('+p.c+');color:#fff">'+p.g+' оборудование</span><h3>'+p.t+'</h3><p>'+p.d+'</p><div class="note info" style="margin:10px 0 0"><b>Оператору</b>'+p.o+'</div>';
+    updSeen();
+  }
+  function updSeen(){
+    const n=Object.keys(parts).length;
+    document.getElementById('seenCount').textContent='Изучено узлов: '+seen.size+' из '+n+(seen.size===n?' ✓':'');
+    document.getElementById('seenBar').style.width=(seen.size/n*100)+'%';
+  }
+  updSeen();
+
+  // Affinity
+  const f=document.getElementById('freq');
+  function aff(){
+    const r=f.value/50;document.getElementById('fVal').textContent=f.value;
+    const set=(id,v)=>{document.getElementById('b'+id).style.width=Math.min(v/1.8*100,100)+'%';document.getElementById('v'+id).textContent=Math.round(v*100)+'%';};
+    set('Q',r);set('H',r*r);set('N',r*r*r);
+  }
+  f.addEventListener('input',aff);aff();
+
+  // Steps
+  const stepBoxes=[...document.querySelectorAll('#startSteps input')];
+  stepBoxes.forEach(c=>c.addEventListener('change',()=>{
+    document.getElementById('stepsDone').style.display=stepBoxes.every(x=>x.checked)?'block':'none';
+  }));
+
+  // Diagnostics
+  const st={i:'norm',q:'norm',p:'norm'};
+  document.querySelectorAll('.seg').forEach(seg=>{
+    seg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+      st[seg.dataset.k]=b.dataset.v;diag();
+    }));
+  });
+  function diag(){
+    const {i,q,p}=st;let r;
+    if(p==='high'&&q!=='norm') r={c:'bad',t:'Препятствие в выкидной линии',why:'Закрыта или не полностью открыта задвижка, АСПО или гидратная пробка в линии, засорение. Насос работает «на закрытую задвижку» — ток обычно снижается, жидкость не отводится, двигатель плохо охлаждается.',act:'Проверить положение задвижек на устье и в линии. Сообщить мастеру. Не открывать и не разбирать ничего под давлением без распоряжения.'};
+    else if(i==='high') r={c:'bad',t:'Перегруз двигателя',why:'Мехпримеси, отложения солей или АСПО в насосе, высокая вязкость или эмульсия, начало заклинивания, просадка напряжения.',act:'Сообщить технологу. При отключении по перегрузу не выполнять повторные пуски сверх разрешённых. Проверить напряжение сети, отобрать пробу на КВЧ.'};
+    else if(i==='low'&&q==='none') r={c:'bad',t:'Срыв подачи',why:'Уровень опустился к приёму насоса, большое количество свободного газа, засорение приёмной сетки. При токе на уровне холостого хода — возможен слом вала.',act:'Не перезапускать многократно. Проверить уровень (Pпр по ТМС или эхолот). Сообщить технологу — нужен пересмотр режима.'};
+    else if(i==='low'&&q==='low') r={c:'warn',t:'Работа с газом или снижение уровня',why:'Свободный газ на приёме, приближение к срыву подачи, неверное направление вращения.',act:'Проверить затрубное давление и Pпр. Сообщить технологу о возможной смене режима или стравливании газа по регламенту.'};
+    else if(i!=='high'&&q==='none') r={c:'bad',t:'Жидкость не доходит до устья',why:'Негерметичность НКТ, открыт сливной клапан, неверное направление вращения (после ремонта или пуска).',act:'Сообщить мастеру. После пуска — проверить направление вращения по подаче и давлению.'};
+    else if(i==='norm'&&q==='low') r={c:'warn',t:'Снижение подачи',why:'Износ ступеней, частичная негерметичность НКТ, начало отложений, снижение притока.',act:'Выполнить контрольный замер дебита, сравнить с предыдущими. Сообщить технологу.'};
+    else if(i==='low'&&q==='norm') r={c:'warn',t:'Недогрузка при нормальной подаче',why:'Возможна переоценка номинала или начальная стадия поступления газа. Возможна неисправность измерения.',act:'Сравнить с историей параметров, наблюдать за трендом, сообщить при дальнейшем снижении.'};
+    else r={c:'ok',t:'Нормальный режим',why:'Параметры в пределах рабочих значений.',act:'Продолжать плановый контроль, записывать параметры в журнал.'};
+    document.getElementById('diagOut').innerHTML='<div class="note '+r.c+'" style="margin:0"><b>'+r.t+'</b><p style="margin:4px 0">'+r.why+'</p><p style="margin:0"><b style="display:inline">Действия: </b>'+r.act+'</p></div>';
+  }
+  diag();
+
+  // Quiz
+  const Q=[
+    {q:'Как охлаждается погружной электродвигатель?',o:['Встроенным вентилятором','Потоком пластовой жидкости, проходящим мимо корпуса','Маслом, циркулирующим с поверхности','Не нуждается в охлаждении'],a:1,e:'ПЭД охлаждается жидкостью, движущейся к приёму насоса. Нет подачи — нет охлаждения.'},
+    {q:'Назначение обратного клапана:',o:['Сливать жидкость из НКТ перед подъёмом','Удерживать столб жидкости в НКТ при остановке','Отделять газ','Регулировать подачу'],a:1,e:'Обратный клапан не даёт жидкости стечь через насос и исключает турбинное вращение.'},
+    {q:'Какой узел не даёт пластовой жидкости попасть в двигатель?',o:['Газосепаратор','ТМС','Гидрозащита','Сливной клапан'],a:2,e:'Гидрозащита (протектор и компенсатор) изолирует масло ПЭД от пластовой жидкости.'},
+    {q:'Ток резко упал до уровня холостого хода, подачи нет. Что это вероятнее всего?',o:['Перегруз','Срыв подачи','Нормальный режим','Снижение изоляции'],a:1,e:'Низкий ток и отсутствие подачи — типичная картина срыва подачи (газ, низкий уровень) или слома вала.'},
+    {q:'Ток постепенно растёт, подача снижается. Вероятная причина:',o:['Газ на приёме','Отложения солей или мехпримеси в насосе','Открыт сливной клапан','Закрыта задвижка'],a:1,e:'Рост тока со снижением подачи характерен для отложений, мехпримесей, роста вязкости.'},
+    {q:'Что обязательно проверить перед пуском?',o:['Только наличие напряжения','Задвижки открыты, нет турбинного вращения, изоляция в норме','Цвет кабеля','Температуру воздуха'],a:1,e:'Пуск на закрытую задвижку, при турбинном вращении или низкой изоляции приводит к отказу.'},
+    {q:'Установка отключилась по защите. Правильные действия:',o:['Сразу перезапустить несколько раз подряд','Выяснить причину, действовать по инструкции, сообщить мастеру/технологу','Отключить защиту и запустить','Ничего не делать до конца смены'],a:1,e:'Многократные пуски без анализа причины повреждают двигатель и кабель.'},
+    {q:'При повышении частоты с 50 до 55 Гц потребляемая мощность вырастет примерно на:',o:['5%','10%','21%','33%'],a:3,e:'Мощность ∝ f³: 1,1³ ≈ 1,33, то есть примерно +33%.'},
+    {q:'Зачем нужна клеммная коробка (КВЗ)?',o:['Для повышения напряжения','Для соединения кабелей и предотвращения попадания газа в СУ','Для замера дебита','Для защиты от перегруза'],a:1,e:'КВЗ соединяет кабели и вентилируется, чтобы газ, прошедший по кабелю, не попал в станцию управления.'},
+    {q:'Кто имеет право открывать станцию управления и трансформатор?',o:['Любой оператор','Только допущенный электротехнический персонал','Водитель спецтехники','Любой работник по устному указанию'],a:1,e:'Работы с электрооборудованием — только допущенный электротехнический персонал.'}
+  ];
+  const qz=document.getElementById('quiz');
+  function renderQuiz(){
+    qz.innerHTML=Q.map((x,i)=>'<div class="q" id="q'+i+'"><h3>'+(i+1)+'. '+x.q+'</h3>'+x.o.map((o,j)=>'<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"><span>'+o+'</span></label>').join('')+'<div class="expl">'+x.e+'</div></div>').join('');
+    const res=document.getElementById('quizResult');res.className='result card';res.innerHTML='';
+  }
+  renderQuiz();
+  document.getElementById('quizCheck').addEventListener('click',()=>{
+    let score=0,answered=0;
+    Q.forEach((x,i)=>{
+      const box=document.getElementById('q'+i);box.classList.add('checked');
+      const sel=box.querySelector('input:checked');
+      box.querySelectorAll('.opt').forEach((l,j)=>{l.classList.remove('right','wrong');if(j===x.a)l.classList.add('right');});
+      if(sel){answered++;const v=+sel.value;if(v===x.a)score++;else sel.closest('.opt').classList.add('wrong');}
+    });
+    const pass=score>=8;
+    const res=document.getElementById('quizResult');
+    res.className='result card show';res.style.setProperty('--rc',pass?'var(--ok)':'var(--bad)');
+    res.innerHTML='<div class="score" style="color:var('+(pass?'--ok':'--bad')+')">'+score+' / '+Q.length+'</div><p><b>'+(pass?'Зачёт. Курс пройден.':'Незачёт.')+'</b> '+(pass?'Вы знаете основы эксплуатации УЭЦН. Сохраните памятку ниже.':'Просмотрите пояснения к вопросам и вернитесь к модулям 2–5.')+(answered<Q.length?' Без ответа: '+(Q.length-answered)+'.':'')+'</p>';
+    if(pass) markDone(modules.length-1);
+    res.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.getElementById('quizReset').addEventListener('click',renderQuiz);
+})();
+</script>
+</body>
+</html>
